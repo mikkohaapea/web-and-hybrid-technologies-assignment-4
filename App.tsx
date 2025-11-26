@@ -6,7 +6,6 @@ import { TodoListRowProps } from './props/todoListRowProps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ASYNC_STORAGE_KEY = 'TODO_LIST_TASKS'
-//const ASYNC_STORAGE_KEY = 'TODO_LIST_ITEMS'
 
 export default function App() {
   const [input, setInput] = useState<string>('')
@@ -29,14 +28,6 @@ export default function App() {
     AsyncStorage.setItem(ASYNC_STORAGE_KEY, JSON.stringify(tasks))
   }, [tasks])
 
-  /*
-  const switchStatus = (id: string) => {
-    const tempArr: TodoListRowProps[] = []
-    tasks.map((task) => {
-      task.id === id ? tempArr.push({...task, taskStatus: !task.taskStatus}) : tempArr.push(task)
-    })
-    setTasks(tempArr)
-  }*/
   const switchStatus = (id: string) => {
     setTasks(
       tasks.map((task) => {
@@ -71,7 +62,7 @@ export default function App() {
       <View style={styles.inputView}>
         <View style={{ flex: 1 }}>
           <TextInput
-            style={{ /*backgroundColor: 'green',*/ flexGrow: 1 }}
+            style={{ flexGrow: 1 }}
             placeholder='Enter task'
             value={input}
             onChangeText={setInput}
@@ -82,7 +73,6 @@ export default function App() {
             submitBehavior='submit' //dont close soft keyboard on submit
           />
         </View>
-
         <Pressable
           onPress={() => {
             addTask(input)
@@ -94,17 +84,6 @@ export default function App() {
             Save
           </Text>
         </Pressable>
-
-        {/* //alternative to pressable text
-        <Button
-          title='Save'
-          onPress={() => {
-            setTasks([...tasks, input])
-            setInput('')
-          }}
-        />
-        */}
-
       </View>
       <FlatList
         style={{ marginBottom: 48 }} //jotta lista ei menisi alapalkin päälle
@@ -129,8 +108,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    //backgroundColor: 'red',
-    //alignItems: 'center',
     marginTop: 32,
     padding: 8
   },
@@ -141,13 +118,9 @@ const styles = StyleSheet.create({
   },
   inputView: {
     flexDirection: 'row',
-    //alignItems: 'stretch',
-    //justifyContent: 'space-between',
-    //backgroundColor: 'yellow',
     marginBottom: 32
   },
   pressable: {
-    //backgroundColor: 'blue',
     justifyContent: 'center',
     width: '15%',
     alignItems: 'center'

@@ -17,19 +17,14 @@ const TodoListRow: React.FC<TodoListRowProps> = ({ id, taskTitle, taskStatus, on
 
 const styles = StyleSheet.create({
   row: {
-    //backgroundColor: '#ff00ffff',
     marginBottom: 16,
-    //paddingVertical: 8,
-    //paddingHorizontal: 8
     padding: 8
   },
   undone: {
-    //backgroundColor: '#ff00ffff',
     marginBottom: 8,
     textDecorationLine: 'none'
   },
   done: {
-    //backgroundColor: '#ff00ffff',
     marginBottom: 8,
     textDecorationLine: 'line-through'
   }
