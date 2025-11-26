@@ -1,38 +1,15 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { TodoListRowProps } from '../props/todoListRowProps'
 
-/*
-type TodoListRowProps = {
-  task: string,
-  status: boolean
-}*/
-
-/*
-export default function TodoListRow({ task }: TodoListRowProps) {
-  const [isTaskDone, setIsTaskDone] = useState<boolean>(false)
+const TodoListRow: React.FC<TodoListRowProps> = ({ id, taskTitle, taskStatus, onToggle }) => {
   return (
     <Pressable
-      onPress={() => {setIsTaskDone(!isTaskDone)}}
-    >
-      <View>
-        <Text style={isTaskDone ? styles.done : styles.undone}>TodoListRow: {task} {String(isTaskDone)}</Text>
-      </View>
-    </Pressable>
-  )
-}*/
-
-
-
-const TodoListRow: React.FC<TodoListRowProps> = ({ taskTitle, taskStatus=false }) => {
-  const [isTaskDone, setIsTaskDone] = useState<boolean>(taskStatus)
-  return (
-    <Pressable
-      onPress={() => { setIsTaskDone(!isTaskDone) }}
+      onPress={() => { onToggle(id) }}
       hitSlop={10}
     >
       <View style={styles.row}>
-        <Text style={isTaskDone ? styles.done : styles.undone}>{taskTitle}</Text>
+        <Text style={taskStatus ? styles.done : styles.undone}>{taskTitle}</Text>
       </View>
     </Pressable>
   )

@@ -1,20 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import TodoListRow from './components/TodoListRow';
 import { TodoListRowProps } from './props/todoListRowProps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-/*
-type taskProps = {
-  taskTitle: string,
-  taskStatus: boolean //onko taski tehty (true) vai ei (false):
-}*/
+const ASYNC_STORAGE_KEY = 'TODO_LIST_TASKS'
+//const ASYNC_STORAGE_KEY = 'TODO_LIST_ITEMS'
 
 export default function App() {
   const [input, setInput] = useState<string>('')
-  //const [tasks, setTasks] = useState<string[]>([])
   const [tasks, setTasks] = useState<TodoListRowProps[]>([])
 
+  useEffect(() => {
+    //fetch tasks from storage
+    (async () => {
+      try {
+        const json = await AsyncStorage.getItem(ASYNC_STORAGE_KEY)
+        if (json) setTasks(JSON.parse(json))
+      } catch (e) {
+        console.log("error fetching tasks")
+      }
+    })()
+  }, [])
+
+  useEffect(() => {
+    //save tasks to storage
+    AsyncStorage.setItem(ASYNC_STORAGE_KEY, JSON.stringify(tasks))
+  }, [tasks])
+
+  const switchStatus = (id: string) => {
+    const tempArr: TodoListRowProps[] = []
+    tasks.map((task) => {
+      task.id === id ? tempArr.push({...task, taskStatus: !task.taskStatus}) : tempArr.push(task)
+    })
+    setTasks(tempArr)
+  }
 
   const addTask = (task: string) => {
     if (task.trim().length === 0) {
@@ -22,7 +43,15 @@ export default function App() {
       setInput('')
       return
     }
-    setTasks([...tasks, { taskTitle: task, taskStatus: false }])
+    setTasks([
+      ...tasks,
+      {
+        id: Date.now().toString(),
+        taskTitle: task,
+        taskStatus: false,
+        onToggle: switchStatus
+      }
+    ])
     setInput('')
   }
 
@@ -37,11 +66,8 @@ export default function App() {
             value={input}
             onChangeText={setInput}
             maxLength={50} //valinnainen
-            //onKeyPress={(e) => {if (e.nativeEvent.key == 'Enter') handleEnter(input)}}
             onSubmitEditing={() => {
               addTask(input)
-              //setTasks([...tasks, input])
-              //setInput('')
             }}
             submitBehavior='submit' //dont close soft keyboard on submit
           />
@@ -49,8 +75,6 @@ export default function App() {
 
         <Pressable
           onPress={() => {
-            //setTasks([...tasks, input])
-            //setInput('')
             addTask(input)
           }}
           style={styles.pressable}
@@ -70,14 +94,21 @@ export default function App() {
           }}
         />
         */}
+
       </View>
       <FlatList
         style={{ marginBottom: 48 }} //jotta lista ei menisi alapalkin päälle
         data={tasks}
-        //renderItem={({ item }) => <Text style={{paddingBottom: 8}}>{item}</Text>}
-
-        //renderItem={({ item }) => <TodoListRow task={item}></TodoListRow>}
-        renderItem={({ item }) => <TodoListRow taskTitle={item.taskTitle} taskStatus={item.taskStatus}></TodoListRow>}
+        renderItem={({ item }) => {
+          return (
+            <TodoListRow
+              id={item.id}
+              taskTitle={item.taskTitle}
+              taskStatus={item.taskStatus}
+              onToggle={switchStatus}
+            />
+          )
+        }}
       />
       <StatusBar style="auto" />
     </View>
