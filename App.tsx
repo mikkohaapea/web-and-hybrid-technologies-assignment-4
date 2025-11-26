@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Button, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import TodoListRow from './components/TodoListRow';
 import { TodoListRowProps } from './props/todoListRowProps';
 import AsyncStorage from '@react-native-async-storage/async-storage';
