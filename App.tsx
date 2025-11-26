@@ -29,12 +29,22 @@ export default function App() {
     AsyncStorage.setItem(ASYNC_STORAGE_KEY, JSON.stringify(tasks))
   }, [tasks])
 
+  /*
   const switchStatus = (id: string) => {
     const tempArr: TodoListRowProps[] = []
     tasks.map((task) => {
       task.id === id ? tempArr.push({...task, taskStatus: !task.taskStatus}) : tempArr.push(task)
     })
     setTasks(tempArr)
+  }*/
+  const switchStatus = (id: string) => {
+    setTasks(
+      tasks.map((task) => {
+        return (
+          task.id === id ? { ...task, taskStatus: !task.taskStatus } : task
+        )
+      })
+    )
   }
 
   const addTask = (task: string) => {
@@ -61,7 +71,7 @@ export default function App() {
       <View style={styles.inputView}>
         <View style={{ flex: 1 }}>
           <TextInput
-            style={{ backgroundColor: 'green', flexGrow: 1 }}
+            style={{ /*backgroundColor: 'green',*/ flexGrow: 1 }}
             placeholder='Enter task'
             value={input}
             onChangeText={setInput}
@@ -80,12 +90,12 @@ export default function App() {
           style={styles.pressable}
           hitSlop={10}
         >
-          <Text style={{ color: '#00ffffff' }}>
+          <Text style={{ color: '#00cfcfff' }}>
             Save
           </Text>
         </Pressable>
 
-        {/*
+        {/* //alternative to pressable text
         <Button
           title='Save'
           onPress={() => {
@@ -119,7 +129,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'red',
+    //backgroundColor: 'red',
     //alignItems: 'center',
     marginTop: 32,
     padding: 8
@@ -133,11 +143,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     //alignItems: 'stretch',
     //justifyContent: 'space-between',
-    backgroundColor: 'yellow',
+    //backgroundColor: 'yellow',
     marginBottom: 32
   },
   pressable: {
-    backgroundColor: 'blue',
+    //backgroundColor: 'blue',
     justifyContent: 'center',
     width: '15%',
     alignItems: 'center'
